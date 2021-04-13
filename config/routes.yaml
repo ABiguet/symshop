@@ -1,3 +1,22 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
+index:
+    path: /
+    controller: App\Controller\TestController::index
+
+#test:
+#    path: /test/{age<\d+>?0}
+#    controller: App\Controller\TestController::test
+##    CONTRAINTES ROUTES
+##    methods permet d'ajouter des contraintes aux routes. Par exemple ici, la route ne peut recevoir que des arguments en POST ou en GET
+#    methods: [GET, POST]
+##    host verouille l'acces a l'url uniquement aux adresses listees
+#    host: 127.0.0.1
+##    verouille l'acces a la route uniquement a https
+#    schemes: [https]
+##
+##    CONTRAINTES PARAMETRES
+##    --- <\d+>?0 apres age est un condense de ça : ---
+##    defaults:
+##        age: 0
+##    requirements:
+##        age: \d+
+
