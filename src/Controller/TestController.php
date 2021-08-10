@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class TestController
 {
     /**
-     * @Route ("/", name="index")
+     * @Route ("/test", name="index")
      */
     public function index()
     {
@@ -24,8 +24,9 @@ class TestController
      *     host="127.0.0.1",
      *     schemes={"https"})
      */
-    public function test(Request $request, $age) : Response
+    public function test(Request $request, $age): Response
     {
+        dump($request);
         return new Response("Vous avez $age ans");
     }
 }
