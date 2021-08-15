@@ -15,6 +15,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\Validator\Constraints\Collection;
+use Symfony\Component\Validator\Constraints\GreaterThan;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\LessThan;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ProductController extends AbstractController
 {
@@ -57,31 +63,59 @@ class ProductController extends AbstractController
     }
 
     #[Route('/admin/product/{id}/edit', name: 'product_edit')]
-    public function edit($id, ProductRepository $productRepository, SluggerInterface $slugger, EntityManagerInterface $em, Request $request, UrlGeneratorInterface $urlGeneratorInterface)
+    public function edit($id, ProductRepository $productRepository, SluggerInterface $slugger, EntityManagerInterface $em, Request $request, ValidatorInterface $validator)
     {
+        // /**
+        //  * Présentation du validator
+        //  * Tout ce qui est commenté est en exemple
+        //  */
+
+        // $age = 36;
+
+        // $client = [
+        //     'nom' => 'Biguet',
+        //     'prenom' => 'Aurélien',
+        //     'voiture' => [
+        //         'marque' => '',
+        //         'couleur' => ''
+        //     ]
+        // ];
+        // $collection = new Collection([
+        //     'nom' => new NotBlank(['message' => 'Le nom ne doit pas être vide']),
+        //     'prenom' => [
+        //         new NotBlank(['message' => 'Le nom ne doit pas être vide']),
+        //         new Length(['min' => 3, 'minMessage' => "Le prénom ne doit pas faire moins de 3 caractère"])
+        //     ],
+        //     'voiture' => new Collection([
+        //         'marque' => new NotBlank(['message' => "La marque de la voiture est obligatoire"]),
+        //         'couleur' => new NotBlank(['message' => "La couleur de la voiture est obligatoire"]),
+        //     ])
+        // ]);
+
+        // $product = new Product;
+
+        // $product->setName("to");
+        // $product->setPrice(2000);
+        // $result = $validator->validate($product);
+
+        // if ($result->count() > 0) dd("Il y a des erreur ", $result);
+        // else dd("Tout va bien", $result);
+
         $product = $productRepository->find($id);
         $form = $this->createForm(ProductType::class, $product);
-        //$form->setData($product); -> equivalent a passer $prduct dans le create form
+        //$form->setData($product); -> equivalent a passer $product dans le create form
 
         $form->handleRequest($request);
-        if ($form->isSubmitted()) {
+
+        if ($form->isSubmitted() && $form->isValid()) {
             $product->setSlug(strtolower($slugger->slug($product->getName())));
             $em->flush();
-
-            // $url = $urlGeneratorInterface->generate('product_show', [
-            //     'slug_category' => $product->getCategory()->getSlug(),
-            //     'slug' => $product->getSlug()
-            // ]);
-
-            // $response = new RedirectResponse($url);
-            // return $response;
 
             return $this->redirectToRoute('product_show', [
                 'slug_category' => $product->getCategory()->getSlug(),
                 'slug' => $product->getSlug()
             ]);
         }
-
         $formView = $form->createView();
         return $this->render('product/edit.html.twig', [
             'product' => $product,
@@ -99,7 +133,7 @@ class ProductController extends AbstractController
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $product->setSlug(strtolower($slugger->slug($product->getName())));
             // $product = new Product;
             // $product->setName($data['name'])
