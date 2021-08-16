@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	Identification
+{% endblock %}
+
+{% block body %}
+	<div class="row">
+		<div class="col-6">
+			<h1>Identification</h1>
+			{# {{ form(formView, {'attr': {'novalidate':'novalidate'}}) }} #}
+			{% if error %}
+				<div class="alert alert-dismissible alert-danger">
+					<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+					<h4 class="alert-heading">
+						Oups...<i class="far fa-frown"></i>
+					</h4>
+					<p class-'mb-0'>
+						Quelque chose s'est mal passée.
+					</p>
+				</div>
+			{% endif %}
+			{{ form_start(formView) }}
+			{{ form_errors(formView) }}
+			{{ form_widget(formView) }}
+			<button type="submit" class="btn btn-primary mt-2">
+				<i class="fa fa-save"></i>
+				Connexion
+			</button>
+			{{ form_end(formView) }}
+		</div>
+	</div>
+{% endblock %}

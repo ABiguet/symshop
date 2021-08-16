@@ -4,18 +4,21 @@ namespace App\DataFixtures;
 
 use App\Entity\Category;
 use App\Entity\Product;
-
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 class AppFixtures extends Fixture
 {
     protected $slugger;
-    public function __construct(SluggerInterface $slugger)
+    protected $encoder;
+    public function __construct(SluggerInterface $slugger, UserPasswordEncoderInterface $encoder)
     {
         $this->slugger = $slugger;
+        $this->encoder = $encoder;
     }
     public function load(ObjectManager $manager)
     {
@@ -42,6 +45,28 @@ class AppFixtures extends Fixture
 
                 $manager->persist($product);
             }
+        }
+
+        $admin = new User;
+
+        $admin->setEmail("admin@gmail.com")
+            ->setFirstName('Aurélien')
+            ->setLastName('Biguet')
+            ->setPassword($this->encoder->encodePassword($admin, '031284'))
+            ->setRoles(['ROLE_ADMIN']);
+
+        $manager->persist($admin);
+
+        for ($u = 0; $u < 10; $u++) {
+            $user = new User;
+            $user->setFirstName($faker->firstName())
+                ->setLastName($faker->lastName())
+                ->setPassword($this->encoder->encodePassword($user, 'password'));
+
+            $email = strtolower($this->slugger->slug($user->getFirstName()) . '.' . $this->slugger->slug($user->getLastName()) . '@' . $faker->freeEmailDomain());
+            $user->setEmail($email);
+
+            $manager->persist($user);
         }
 
         $manager->flush();
