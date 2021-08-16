@@ -25,8 +25,7 @@ class ProductType extends AbstractType
         $builder
             ->add('name', TextType::class, [
                 'label' => 'Nom du produit',
-                'attr' => ['placeholder' => 'Tapez le nom du produit'],
-                'required' => false
+                'attr' => ['placeholder' => 'Tapez le nom du produit']
             ])
             ->add('shortDescription', TextareaType::class, [
                 'label' => 'Courte description du produit',

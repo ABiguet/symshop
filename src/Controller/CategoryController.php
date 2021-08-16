@@ -14,16 +14,31 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 
 class CategoryController extends AbstractController
 {
+    protected $categoryRepository;
+
+    public function __construct(CategoryRepository $categoryRepository)
+    {
+        $this->categoryRepository = $categoryRepository;
+    }
+    public function renderMenuList()
+    {
+        // 1. Aller chercher les categories dans la base de donnees
+        $categories = $this->categoryRepository->findAll();
+
+        // 2. Renvoyer le rendu html sous la forme d'une response
+        return $this->render('category/_menu.html.twig', ['categories' => $categories]);
+    }
     #[Route('/admin/category/create', name: 'category_create')]
     public function create(Request $request, SluggerInterface $slugger): Response
     {
         $em = $this->getDoctrine()->getManager();
+
         $category = new Category;
-        $form = $this->createForm(CategoryType::class, $category,);
+        $form = $this->createForm(CategoryType::class, $category);
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $category->setSlug(strtolower($slugger->slug($category->getName())));
             $em->persist($category);
             $em->flush();
