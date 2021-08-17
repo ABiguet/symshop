@@ -22,7 +22,7 @@ class Category
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank(message="Le nom du produit est obligatoire")
+     * @Assert\NotBlank(message="Le nom de la catégorie est obligatoire")
      * @Assert\Length(min=3, max=255, minMessage="Le nom de la catégorie doit faire plus de 3 caractères")
      */
     private $name;
@@ -36,6 +36,11 @@ class Category
      * @ORM\OneToMany(targetEntity=Product::class, mappedBy="category")
      */
     private $products;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="categories")
+     */
+    private $owner;
 
     public function getId(): ?int
     {
@@ -92,6 +97,18 @@ class Category
                 $product->setCategory(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getOwner(): ?User
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?User $owner): self
+    {
+        $this->owner = $owner;
 
         return $this;
     }

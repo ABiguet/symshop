@@ -56,6 +56,13 @@ class AppFixtures extends Fixture
             ->setRoles(['ROLE_ADMIN']);
 
         $manager->persist($admin);
+        $user = new User;
+        $user->setEmail("user@gmail.com")
+            ->setFirstName('Aurélien')
+            ->setLastName('Biguet')
+            ->setPassword($this->encoder->encodePassword($admin, '031284'));
+
+        $manager->persist($user);
 
         for ($u = 0; $u < 10; $u++) {
             $user = new User;
