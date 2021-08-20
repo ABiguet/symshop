@@ -14,7 +14,9 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
-    #[Route('/login', name: 'security_login')]
+    /*
+    * @Route("/login", name="security_login")
+    */
     public function login(AuthenticationUtils $authenticationUtils, FormFactoryInterface $factory)
     {
         $form = $this->createForm(LoginType::class, ['email' => $authenticationUtils->getLastUsername()]);
@@ -23,7 +25,9 @@ class SecurityController extends AbstractController
             'error' => $authenticationUtils->getLastAuthenticationError()
         ]);
     }
-    #[Route('/logout', name: 'security_logout')]
+    /*
+    * @Route("/logout", name="security_logout")
+    */
     public function logout()
     {
     }

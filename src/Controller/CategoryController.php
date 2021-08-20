@@ -34,7 +34,9 @@ class CategoryController extends AbstractController
         return $this->render('category/_menu.html.twig', ['categories' => $categories]);
     }
 
-    #[Route('/admin/category/create', name: 'category_create')]
+    /**
+     * @Route("/admin/category/create", name="category_create")
+     */
     public function create(Request $request, SluggerInterface $slugger): Response
     {
         $em = $this->getDoctrine()->getManager();
@@ -53,8 +55,9 @@ class CategoryController extends AbstractController
         $formView = $form->createView();
         return $this->render('category/create.html.twig', ['formView' => $formView]);
     }
-
-    #[Route('/admin/category/{id}/edit', name: 'category_edit')]
+    /** 
+     *@Route("/admin/category/{id}/edit", name="category_edit")
+     */
     /**
      * isGranted peut être placé au dessus de la classe pour restreindre a toutes les méthodes
      */
