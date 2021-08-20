@@ -56,7 +56,7 @@ class CategoryController extends AbstractController
         return $this->render('category/create.html.twig', ['formView' => $formView]);
     }
     /** 
-     *@Route("/admin/category/{id}/edit", name="category_edit")
+     * @Route("/admin/category/{id}/edit", name="category_edit")
      */
     /**
      * isGranted peut être placé au dessus de la classe pour restreindre a toutes les méthodes

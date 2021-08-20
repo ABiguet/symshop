@@ -24,9 +24,10 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ProductController extends AbstractController
 {
-    /*
-    * @Route("/{slug}", name="product_category", priority=-1)
-    */
+    /**
+     * @Route("/{slug}", name="product_category", priority=-1)
+     */
+    #[Route('/{slug}', name: 'product_category', priority: -1)]
     public function category($slug, CategoryRepository $categoryRepository)
     {
         $category = $categoryRepository->findOneBy([
@@ -42,9 +43,9 @@ class ProductController extends AbstractController
             'category' => $category
         ]);
     }
-    /*
-    * @Route("/{slug_category}/{slug}", name="product_show")
-    */
+    /**
+     * @Route("/{slug_category}/{slug}", name="product_show")
+     */
     public function show($slug_category, $slug, ProductRepository $productRepository, CategoryRepository $categoryRepository)
     {
         $category = $categoryRepository->findOneBy([
@@ -64,9 +65,9 @@ class ProductController extends AbstractController
             'product' => $product
         ]);
     }
-    /*
-    * @Route("/admin/product/{id}/edit", name="product_edit")
-    */
+    /**
+     * @Route("/admin/product/{id}/edit", name="product_edit")
+     */
     public function edit($id, ProductRepository $productRepository, SluggerInterface $slugger, EntityManagerInterface $em, Request $request, ValidatorInterface $validator)
     {
         // /**
@@ -126,9 +127,9 @@ class ProductController extends AbstractController
             'formView' => $formView
         ]);
     }
-    /*
-    * @Route("/admin/product/create", name="product_create")
-    */
+    /**
+     * @Route("/admin/product/create", name="product_create")
+     */
     public function create(FormFactoryInterface $factory, Request $request, EntityManagerInterface $em, SluggerInterface $slugger)
     {
         // $builder = $factory->createBuilder(ProductType::class);
