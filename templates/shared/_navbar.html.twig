@@ -1,3 +1,8 @@
+{% set total = 0  %}
+{% for quantity in app.session.get('cart') %}
+	{% set total = total + quantity %}
+{% endfor %}
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 	<div class="container">
 		<a class="navbar-brand" href="/">
@@ -49,7 +54,23 @@
 
 					</div>
 				</li>
-			</ul>
-		</div>
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+						<i class="fas fa-shopping-cart"></i>
+						<span class="badge rounded-pill bg-danger">{{ total }}</span>
+					</a>
+					<div class="dropdown-menu">
+						{% for productId, quantity in app.session.get('cart') %}
+							{% for product in productRepository.findBy({'id':productId}) %}
+								<div class="dropdown-item">
+									<a class="" href="">{{product.name}}</a>
+									<span class="badge bg-danger">{{quantity}}</span>
+								</div>
+							{% endfor %}
+						{% endfor %}
+					</div>
+				</li>
+			</li>
+		</ul>
 	</div>
-</nav>
+</div></nav>
