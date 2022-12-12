@@ -5,9 +5,12 @@ namespace App\DataFixtures;
 use App\Entity\Category;
 use App\Entity\Product;
 use App\Entity\User;
+use Bezhanov\Faker\Provider\Commerce;
+use Bluemmb\Faker\PicsumPhotosProvider;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
+use Liior\Faker\Prices;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
@@ -23,9 +26,9 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager)
     {
         $faker = Factory::create('fr_FR');
-        $faker->addProvider(new \Liior\Faker\Prices($faker));
-        $faker->addProvider(new \Bezhanov\Faker\Provider\Commerce($faker));
-        $faker->addProvider(new \Bluemmb\Faker\PicsumPhotosProvider($faker));
+        $faker->addProvider(new Prices($faker));
+        $faker->addProvider(new Commerce($faker));
+        $faker->addProvider(new PicsumPhotosProvider($faker));
 
         for ($c = 0; $c < 4; $c++) {
             $category = new Category;
@@ -49,15 +52,16 @@ class AppFixtures extends Fixture
 
         $admin = new User;
 
-        $admin->setEmail("admin@gmail.com")
+        $admin->setEmail('admin@gmail.com')
             ->setFirstName('Aurélien')
             ->setLastName('Biguet')
             ->setPassword($this->encoder->encodePassword($admin, '031284'))
             ->setRoles(['ROLE_ADMIN']);
 
         $manager->persist($admin);
+
         $user = new User;
-        $user->setEmail("user@gmail.com")
+        $user->setEmail('user@gmail.com')
             ->setFirstName('Aurélien')
             ->setLastName('Biguet')
             ->setPassword($this->encoder->encodePassword($admin, '031284'));
